@@ -204,7 +204,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
-var BASE_URL = 'localhost:3000';
+var BASE_URL = 'https://go-live-app.herokuapp.com';
 var ChatService = /** @class */ (function () {
     function ChatService() {
         this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__(BASE_URL);

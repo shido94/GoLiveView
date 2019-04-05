@@ -24,7 +24,7 @@ export interface RemovePeer {
 }
 
 
-const BASE_URL = 'localhost:3000';
+const BASE_URL = 'https://go-live-app.herokuapp.com';
 @Injectable({
   providedIn: 'root'
 })
