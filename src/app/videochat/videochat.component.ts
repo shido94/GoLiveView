@@ -5,7 +5,7 @@ import 'webrtc-adapter';
 import {config} from 'rxjs';
 
 /** CONFIG **/
-const USE_AUDIO = false;
+const USE_AUDIO = true;
 const USE_VIDEO = true;
 const DEFAULT_CHANNEL = 'some-global-channel-name';
 const MUTE_AUDIO_BY_DEFAULT = false;

@@ -477,7 +477,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 /** CONFIG **/
-var USE_AUDIO = false;
+var USE_AUDIO = true;
 var USE_VIDEO = true;
 var DEFAULT_CHANNEL = 'some-global-channel-name';
 var MUTE_AUDIO_BY_DEFAULT = false;
