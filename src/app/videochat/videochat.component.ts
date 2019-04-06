@@ -8,7 +8,7 @@ import {config} from 'rxjs';
 const USE_AUDIO = {
   sampleRate: 48000,
   channelCount: 2,
-  volume: 1.0,
+  volume: 0,
   echoCancellation : true
 };
 

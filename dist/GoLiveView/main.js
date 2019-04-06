@@ -480,7 +480,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var USE_AUDIO = {
     sampleRate: 48000,
     channelCount: 2,
-    volume: 1.0,
+    volume: 0,
     echoCancellation: true
 };
 var USE_VIDEO = true;
