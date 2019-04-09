@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import * as io from 'socket.io-client';
 // import * as ss from 'socket.io-stream';
 
@@ -25,12 +25,20 @@ export interface RemovePeer {
 
 
 const BASE_URL = 'https://go-live-app.herokuapp.com';
+// const BASE_URL = 'localhost:3000';
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class ChatService {
+  // public messageSource = new Subject();
   private socket = io(BASE_URL);
+
+  // sendMessage(message: string) {
+  //   console.log(message);
+  //   this.messageSource.next(message);
+  // }
 
   sendData(joinData) {
     this.socket.emit('join', joinData);

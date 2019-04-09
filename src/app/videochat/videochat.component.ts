@@ -3,6 +3,7 @@ import {ChatService, PeerData} from '../app.service';
 import * as $ from 'jquery';
 import 'webrtc-adapter';
 import {config} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
 
 /** CONFIG **/
 const USE_AUDIO = {
@@ -13,7 +14,7 @@ const USE_AUDIO = {
 };
 
 const USE_VIDEO = true;
-const DEFAULT_CHANNEL = 'some-global-channel-name';
+let DEFAULT_CHANNEL = 'some-global-channel-name';
 const MUTE_AUDIO_BY_DEFAULT = false;
 
 declare let RTCPeerConnection: any;
@@ -40,8 +41,9 @@ const ICE_SERVERS = [
 export class VideochatComponent implements OnInit, OnDestroy {
   // video: HTMLVideoElement;
   // stream;
+  channelName: string;
 
-  constructor(private _chatService: ChatService) {
+  constructor(private _chatService: ChatService, private _route: ActivatedRoute) {
 
     // console.log('Signaling server said to add peer:', config);
     this._chatService.recievingAddPeer()
@@ -86,7 +88,11 @@ export class VideochatComponent implements OnInit, OnDestroy {
           // (<HTMLVideoElement>document.getElementById('vid2')).src = window.URL.createObjectURL(local_media_stream);
           const video = <HTMLVideoElement>document.querySelector('#vid2');
           // // inserting our stream to the video tag
-          video.src = window.URL.createObjectURL(event.stream);
+          // video.src = window.URL.createObjectURL(event.stream);
+          video.srcObject = event.stream;
+          video.onloadedmetadata = function(e) {
+            video.play();
+          };
         };
 
         /* Add our local stream */
@@ -172,7 +178,8 @@ export class VideochatComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    console.log('reaches');
     const _navigator = <any>navigator;
     const constraints = { audio: USE_AUDIO, video: USE_VIDEO };
 
@@ -180,9 +187,11 @@ export class VideochatComponent implements OnInit, OnDestroy {
     setup_local_media( () => {
       /* once the user has given us access to their
        * microphone/camcorder, join the channel and start peering up */
+      this._route.params.subscribe(params => {
+        DEFAULT_CHANNEL = params['channel'];
 
-      this._chatService.sendData({'channel': DEFAULT_CHANNEL, 'userdata': {'whatever-you-want-here': 'stuff'}});
-
+        this._chatService.sendData({'channel': DEFAULT_CHANNEL, 'userdata': {'whatever-you-want-here': 'stuff'}});
+      });
     }, error => {
       alert('Camera can not be access');
     });
@@ -194,24 +203,6 @@ export class VideochatComponent implements OnInit, OnDestroy {
           return;
         }
       }
-      // const desktopConstraints = {
-      //
-      //   video: USE_VIDEO,
-      //   audio: USE_AUDIO
-      // };
-      // // constraints for mobile browser
-      // const mobileConstraints = {
-      //
-      //   video: USE_VIDEO,
-      //   audio: USE_AUDIO
-      // };
-      // let constraints;
-      // // if a user is using a mobile browser
-      // if (/Android|iPhone|iPad/i.test(_navigator.userAgent)) {
-      //   constraints = mobileConstraints;
-      // } else {
-      //   constraints = desktopConstraints;
-      // }
 
       function hasUserMedia() {
         // check if the browser supports the WebRTC
@@ -232,7 +223,11 @@ export class VideochatComponent implements OnInit, OnDestroy {
             const video = <HTMLVideoElement>document.querySelector('#vid1');
 
             // inserting our stream to the video tag
-            video.src = window.URL.createObjectURL(stream);
+            // video.src = window.URL.createObjectURL(stream);
+            video.srcObject = stream;
+            video.onloadedmetadata = function(e) {
+              video.play();
+            };
             // (<HTMLVideoElement>document.getElementById('vid1')).src = window.URL.createObjectURL(stream);
 
             // asign stream to local_media

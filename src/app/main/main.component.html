@@ -1,2 +1,39 @@
-<button mat-button (click)="goLive()">GoLive</button>
-<button mat-button (click)="seeList()">See List</button>
+<mat-card>
+  <div class="header">
+    <h1>GoLive</h1>
+  </div>
+  <div class="pHeader">
+    <p>Welcome to our live video chatting website</p>
+  </div>
+  <mat-card-content>
+    <div class="button-row ">
+      <button mat-raised-button color="primary" (click)="goLive()">GoLive</button>
+      <span></span>
+      <button mat-raised-button color="primary" (click)="liveOption()">Connect</button>
+    </div>
+    <div class="pData">
+      <p>
+        GoLive provides free free video chat option with anyone of your choice.
+      </p>
+    </div>
+  </mat-card-content>
+</mat-card>
+<div id="about">
+  <hr class="space1">
+  <div class="container contentData">
+    <div class="Pheader">
+      <h1>
+        About GoLive
+      </h1>
+    </div>
+      It's free online chat. You are going to chat with any stranger of your respective college.
+      Meet & talk to strangers from your college. You have to only enter your college email-id,
+      and we will never share your private details with anyone.
+      To use our free text chatroom, you are accepting our Terms of Usage below
+  </div>
+  <hr class="space2">
+</div>
+<div class="footer">
+  Copyright © 2018 - Colloque | Design and developed by Rupesh yadav
+</div>
+

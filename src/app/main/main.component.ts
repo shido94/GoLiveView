@@ -8,18 +8,19 @@ import {Router} from '@angular/router';
 })
 export class MainComponent implements OnInit {
 
-  constructor(private router: Router) { }
+
+  constructor(private _router: Router) { }
 
   ngOnInit() {
-    // location.reload();
   }
+
 
   goLive() {
-    this.router.navigate(['/live']);
+    this._router.navigate(['channel']);
   }
 
-  seeList() {
-    this.router.navigate(['/connect']);
+  liveOption() {
+    this._router.navigate(['list']);
   }
 
 }

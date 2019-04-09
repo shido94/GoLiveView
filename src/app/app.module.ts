@@ -9,18 +9,30 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {routes} from './app.routes';
 import {ChatService} from './app.service';
+import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule} from '@angular/material';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ChannelComponent } from './channel/channel.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     VideochatComponent,
     MainComponent,
-    ShowvideosComponent
+    ShowvideosComponent,
+    ChannelComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatFormFieldModule,
+    MatCardModule,
+    MatButtonModule,
+    MatInputModule
   ],
   providers: [ChatService],
   bootstrap: [AppComponent]

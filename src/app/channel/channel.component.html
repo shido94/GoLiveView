@@ -1,0 +1,25 @@
+<mat-card>
+  <div class="header">
+    <h1>GoLive</h1>
+  </div>
+  <div class="pHeader">
+    <p>Please use some expressive channel name</p>
+  </div>
+  <mat-card-content>
+    <div class="form">
+      <form class="mat-form" method="post" [formGroup]="uploadForm" enctype="multipart/form-data" (ngSubmit)="OnUpload(uploadForm.value)">
+        <mat-form-field class="form-full-width">
+          <input matInput placeholder="Channel Name" #sub formControlName="chatName"
+                 [errorStateMatcher]="matcher">
+          <mat-error *ngIf="!this.uploadForm.hasError('required')">
+            Channel Name is required
+          </mat-error>
+          <mat-error *ngIf="this.uploadForm.hasError('required')">
+            Channel Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (invalid)="!uploadForm" (click)="OnUpload(uploadForm.value)">GoLive</button>
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>
