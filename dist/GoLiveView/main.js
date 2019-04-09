@@ -100,12 +100,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _app_routes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./app.routes */ "./src/app/app.routes.ts");
 /* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./app.service */ "./src/app/app.service.ts");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _channel_channel_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./channel/channel.component */ "./src/app/channel/channel.component.ts");
+/* harmony import */ var _list_list_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./list/list.component */ "./src/app/list/list.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
 
 
 
@@ -125,12 +133,20 @@ var AppModule = /** @class */ (function () {
                 _app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"],
                 _videochat_videochat_component__WEBPACK_IMPORTED_MODULE_4__["VideochatComponent"],
                 _main_main_component__WEBPACK_IMPORTED_MODULE_3__["MainComponent"],
-                _showvideos_showvideos_component__WEBPACK_IMPORTED_MODULE_5__["ShowvideosComponent"]
+                _showvideos_showvideos_component__WEBPACK_IMPORTED_MODULE_5__["ShowvideosComponent"],
+                _channel_channel_component__WEBPACK_IMPORTED_MODULE_12__["ChannelComponent"],
+                _list_list_component__WEBPACK_IMPORTED_MODULE_13__["ListComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["FormsModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["ReactiveFormsModule"],
                 _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_6__["BrowserAnimationsModule"],
-                _angular_router__WEBPACK_IMPORTED_MODULE_7__["RouterModule"].forRoot(_app_routes__WEBPACK_IMPORTED_MODULE_8__["routes"])
+                _angular_router__WEBPACK_IMPORTED_MODULE_7__["RouterModule"].forRoot(_app_routes__WEBPACK_IMPORTED_MODULE_8__["routes"]),
+                _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatFormFieldModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatCardModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatButtonModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatInputModule"]
             ],
             providers: [_app_service__WEBPACK_IMPORTED_MODULE_9__["ChatService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"]]
@@ -156,6 +172,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _videochat_videochat_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./videochat/videochat.component */ "./src/app/videochat/videochat.component.ts");
 /* harmony import */ var _main_main_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./main/main.component */ "./src/app/main/main.component.ts");
 /* harmony import */ var _showvideos_showvideos_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./showvideos/showvideos.component */ "./src/app/showvideos/showvideos.component.ts");
+/* harmony import */ var _channel_channel_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./channel/channel.component */ "./src/app/channel/channel.component.ts");
+/* harmony import */ var _list_list_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./list/list.component */ "./src/app/list/list.component.ts");
+
+
 
 
 
@@ -165,12 +185,20 @@ var routes = [
         component: _main_main_component__WEBPACK_IMPORTED_MODULE_1__["MainComponent"]
     },
     {
-        path: 'live',
-        component: _videochat_videochat_component__WEBPACK_IMPORTED_MODULE_0__["VideochatComponent"]
+        path: 'channel/:channel',
+        component: _videochat_videochat_component__WEBPACK_IMPORTED_MODULE_0__["VideochatComponent"],
     },
     {
         path: 'connect',
         component: _showvideos_showvideos_component__WEBPACK_IMPORTED_MODULE_2__["ShowvideosComponent"]
+    },
+    {
+        path: 'channel',
+        component: _channel_channel_component__WEBPACK_IMPORTED_MODULE_3__["ChannelComponent"]
+    },
+    {
+        path: 'list',
+        component: _list_list_component__WEBPACK_IMPORTED_MODULE_4__["ListComponent"]
     }
 ];
 // @NgModule({
@@ -205,10 +233,16 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 var BASE_URL = 'https://go-live-app.herokuapp.com';
+// const BASE_URL = 'localhost:3000';
 var ChatService = /** @class */ (function () {
     function ChatService() {
+        // public messageSource = new Subject();
         this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__(BASE_URL);
     }
+    // sendMessage(message: string) {
+    //   console.log(message);
+    //   this.messageSource.next(message);
+    // }
     ChatService.prototype.sendData = function (joinData) {
         this.socket.emit('join', joinData);
     };
@@ -275,6 +309,160 @@ var ChatService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/channel/channel.component.css":
+/*!***********************************************!*\
+  !*** ./src/app/channel/channel.component.css ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".mat-form {\n  min-width: 150px;\n  max-width: 500px;\n  width: 100%;\n}\n\n.form-full-width {\n  width: 100%;\n}\n\nform input{\n  color: white;\n  font-size:18pt;\n  height: 30px;\n  /*width:200px;*/\n}\n\nmat-card button{\n  margin-top: 20px;\n}\n\nmat-card h1{\n  font-family: inherit;\n  font-weight: 500;\n  line-height: 1.2;\n}\n\nmat-card p, h1 {\n  color: white;\n}\n\nmat-card{\n  height: 100%;\n  background-color: #265469;\n  text-align: center;\n}\n\nmat-card mat-hint, mat-error{\n  /*color: white;*/\n}\n\nmat-card .form{\n  text-align: center;\n  align-items: center;\n}\n\nmat-card form{\n  display: inline-block;\n}\n\nmat-card .header{\n  text-align: center;\n  margin-top: 5%;\n  font-size: 2.5em;\n}\n\nmat-card .pHeader p{\n  line-height: 50px;\n  font-size: 1.5em;\n  color: #C6C2C4;\n}\n\nmat-card .pData p{\n  line-height: 50px;\n  font-size: 1.5em;\n}\n\n#about h1{\n  color: #404040;\n  font-size: 3.5rem;\n  font-weight: 300;\n}\n\n#about .Pheader{\n  text-align: center;\n}\n"
+
+/***/ }),
+
+/***/ "./src/app/channel/channel.component.html":
+/*!************************************************!*\
+  !*** ./src/app/channel/channel.component.html ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<mat-card>\n  <div class=\"header\">\n    <h1>GoLive</h1>\n  </div>\n  <div class=\"pHeader\">\n    <p>Please use some expressive channel name</p>\n  </div>\n  <mat-card-content>\n    <div class=\"form\">\n      <form class=\"mat-form\" method=\"post\" [formGroup]=\"uploadForm\" enctype=\"multipart/form-data\" (ngSubmit)=\"OnUpload(uploadForm.value)\">\n        <mat-form-field class=\"form-full-width\">\n          <input matInput placeholder=\"Channel Name\" #sub formControlName=\"chatName\"\n                 [errorStateMatcher]=\"matcher\">\n          <mat-error *ngIf=\"!this.uploadForm.hasError('required')\">\n            Channel Name is required\n          </mat-error>\n          <mat-error *ngIf=\"this.uploadForm.hasError('required')\">\n            Channel Name is <strong>required</strong>\n          </mat-error>\n        </mat-form-field>\n        <button mat-raised-button color=\"primary\" (invalid)=\"!uploadForm\" (click)=\"OnUpload(uploadForm.value)\">GoLive</button>\n      </form>\n    </div>\n  </mat-card-content>\n</mat-card>\n"
+
+/***/ }),
+
+/***/ "./src/app/channel/channel.component.ts":
+/*!**********************************************!*\
+  !*** ./src/app/channel/channel.component.ts ***!
+  \**********************************************/
+/*! exports provided: MyErrorStateMatcher, ChannelComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyErrorStateMatcher", function() { return MyErrorStateMatcher; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChannelComponent", function() { return ChannelComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../app.service */ "./src/app/app.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/** Error when invalid control is dirty, touched, or submitted. */
+var MyErrorStateMatcher = /** @class */ (function () {
+    function MyErrorStateMatcher() {
+    }
+    MyErrorStateMatcher.prototype.isErrorState = function (control, form) {
+        var isSubmitted = form && form.submitted;
+        return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    };
+    return MyErrorStateMatcher;
+}());
+
+var ChannelComponent = /** @class */ (function () {
+    function ChannelComponent(_router, _formBuilder, _chatService) {
+        this._router = _router;
+        this._formBuilder = _formBuilder;
+        this._chatService = _chatService;
+    }
+    ChannelComponent.prototype.ngOnInit = function () {
+        this.uploadForm = this._formBuilder.group({
+            chatName: [null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
+        });
+        this.matcher = new MyErrorStateMatcher();
+    };
+    ChannelComponent.prototype.OnUpload = function (name) {
+        this._router.navigate(['channel', name.chatName]);
+    };
+    ChannelComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-channel',
+            template: __webpack_require__(/*! ./channel.component.html */ "./src/app/channel/channel.component.html"),
+            styles: [__webpack_require__(/*! ./channel.component.css */ "./src/app/channel/channel.component.css")]
+        }),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"], _app_service__WEBPACK_IMPORTED_MODULE_2__["ChatService"]])
+    ], ChannelComponent);
+    return ChannelComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/list/list.component.css":
+/*!*****************************************!*\
+  !*** ./src/app/list/list.component.css ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/list/list.component.html":
+/*!******************************************!*\
+  !*** ./src/app/list/list.component.html ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  list works!\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/list/list.component.ts":
+/*!****************************************!*\
+  !*** ./src/app/list/list.component.ts ***!
+  \****************************************/
+/*! exports provided: ListComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListComponent", function() { return ListComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ListComponent = /** @class */ (function () {
+    function ListComponent() {
+    }
+    ListComponent.prototype.ngOnInit = function () {
+    };
+    ListComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-list',
+            template: __webpack_require__(/*! ./list.component.html */ "./src/app/list/list.component.html"),
+            styles: [__webpack_require__(/*! ./list.component.css */ "./src/app/list/list.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ListComponent);
+    return ListComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/main/main.component.css":
 /*!*****************************************!*\
   !*** ./src/app/main/main.component.css ***!
@@ -282,7 +470,7 @@ var ChatService = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = "/*.example-container {*/\n  /*display: flex;*/\n  /*flex-direction: column;*/\n  /*}*/\n  /*.example-container > * {*/\n  /*width: 100%;*/\n  /*}*/\n  .button-row{\n  text-align: center;\n  /*display: flex;*/\n  align-items: center;\n}\n  .button-row button{\n  margin: 15px;\n}\n  span{\n  width: 30%;\n}\n  mat-card h1{\n  font-family: inherit;\n  font-weight: 500;\n  line-height: 1.2;\n}\n  mat-card p, h1 {\n  color: white;\n}\n  mat-card{\n  height: 90%;\n  background-color: #265469;\n  text-align: center;\n}\n  mat-card .header{\n  text-align: center;\n  margin-top: 5%;\n  font-size: 2.5em;\n}\n  mat-card .pHeader p{\n  line-height: 50px;\n  font-size: 1.5em;\n  color: #C6C2C4;\n}\n  mat-card .pData p{\n  line-height: 50px;\n  font-size: 1.5em;\n}\n  #about h1{\n  color: #404040;\n  font-size: 3.5rem;\n  font-weight: 300;\n}\n  #about .Pheader{\n  text-align: center;\n  /*margin: 100px 70px;*/\n}\n  #about .space1{\n  margin: 100px 70px 0 70px;\n}\n  #about .space2{\n  margin: 20px 70px 100px 70px;\n}\n  #about .contentData{\n  width: 80%;\n  text-align: center;\n  align-items: center;\n}\n  .footer{\n  left: 0;\n  bottom: 0;\n  width: 100%;\n  height: 50px;\n  line-height: 3em;\n  background-color: #265469;\n  text-align: center;\n  align-items: center;\n  font-family: 'Questrial', sans-serif;\n  font-size: 12pt;\n}\n"
 
 /***/ }),
 
@@ -293,7 +481,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<button mat-button (click)=\"goLive()\">GoLive</button>\n<button mat-button (click)=\"seeList()\">See List</button>\n"
+module.exports = "<mat-card>\n  <div class=\"header\">\n    <h1>GoLive</h1>\n  </div>\n  <div class=\"pHeader\">\n    <p>Welcome to our live video chatting website</p>\n  </div>\n  <mat-card-content>\n    <div class=\"button-row \">\n      <button mat-raised-button color=\"primary\" (click)=\"goLive()\">GoLive</button>\n      <span></span>\n      <button mat-raised-button color=\"primary\" (click)=\"liveOption()\">Connect</button>\n    </div>\n    <div class=\"pData\">\n      <p>\n        GoLive provides free free video chat option with anyone of your choice.\n      </p>\n    </div>\n  </mat-card-content>\n</mat-card>\n<div id=\"about\">\n  <hr class=\"space1\">\n  <div class=\"container contentData\">\n    <div class=\"Pheader\">\n      <h1>\n        About GoLive\n      </h1>\n    </div>\n      It's free online chat. You are going to chat with any stranger of your respective college.\n      Meet & talk to strangers from your college. You have to only enter your college email-id,\n      and we will never share your private details with anyone.\n      To use our free text chatroom, you are accepting our Terms of Usage below\n  </div>\n  <hr class=\"space2\">\n</div>\n<div class=\"footer\">\n  Copyright © 2018 - Colloque | Design and developed by Rupesh yadav\n</div>\n\n"
 
 /***/ }),
 
@@ -321,17 +509,16 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var MainComponent = /** @class */ (function () {
-    function MainComponent(router) {
-        this.router = router;
+    function MainComponent(_router) {
+        this._router = _router;
     }
     MainComponent.prototype.ngOnInit = function () {
-        // location.reload();
     };
     MainComponent.prototype.goLive = function () {
-        this.router.navigate(['/live']);
+        this._router.navigate(['channel']);
     };
-    MainComponent.prototype.seeList = function () {
-        this.router.navigate(['/connect']);
+    MainComponent.prototype.liveOption = function () {
+        this._router.navigate(['list']);
     };
     MainComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -464,6 +651,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../app.service */ "./src/app/app.service.ts");
 /* harmony import */ var webrtc_adapter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! webrtc-adapter */ "./node_modules/webrtc-adapter/src/js/adapter_core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -473,6 +661,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -494,11 +683,10 @@ var ICE_SERVERS = [
     { url: 'stun:stun.l.google.com:19302' }
 ];
 var VideochatComponent = /** @class */ (function () {
-    // video: HTMLVideoElement;
-    // stream;
-    function VideochatComponent(_chatService) {
+    function VideochatComponent(_chatService, _route) {
         var _this = this;
         this._chatService = _chatService;
+        this._route = _route;
         // console.log('Signaling server said to add peer:', config);
         this._chatService.recievingAddPeer()
             .subscribe(function (config) {
@@ -535,7 +723,8 @@ var VideochatComponent = /** @class */ (function () {
                 // (<HTMLVideoElement>document.getElementById('vid2')).src = window.URL.createObjectURL(local_media_stream);
                 var video = document.querySelector('#vid2');
                 // // inserting our stream to the video tag
-                video.src = window.URL.createObjectURL(event.stream);
+                // video.src = window.URL.createObjectURL(event.stream);
+                video.srcObject = event.stream;
             };
             /* Add our local stream */
             peer_connection.addStream(local_media_stream);
@@ -615,13 +804,17 @@ var VideochatComponent = /** @class */ (function () {
     }
     VideochatComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log('reaches');
         var _navigator = navigator;
         var constraints = { audio: USE_AUDIO, video: USE_VIDEO };
         // Set_up Th e local media
         setup_local_media(function () {
             /* once the user has given us access to their
              * microphone/camcorder, join the channel and start peering up */
-            _this._chatService.sendData({ 'channel': DEFAULT_CHANNEL, 'userdata': { 'whatever-you-want-here': 'stuff' } });
+            _this._route.params.subscribe(function (params) {
+                DEFAULT_CHANNEL = params['channel'];
+                _this._chatService.sendData({ 'channel': DEFAULT_CHANNEL, 'userdata': { 'whatever-you-want-here': 'stuff' } });
+            });
         }, function (error) {
             alert('Camera can not be access');
         });
@@ -632,24 +825,6 @@ var VideochatComponent = /** @class */ (function () {
                     return;
                 }
             }
-            // const desktopConstraints = {
-            //
-            //   video: USE_VIDEO,
-            //   audio: USE_AUDIO
-            // };
-            // // constraints for mobile browser
-            // const mobileConstraints = {
-            //
-            //   video: USE_VIDEO,
-            //   audio: USE_AUDIO
-            // };
-            // let constraints;
-            // // if a user is using a mobile browser
-            // if (/Android|iPhone|iPad/i.test(_navigator.userAgent)) {
-            //   constraints = mobileConstraints;
-            // } else {
-            //   constraints = desktopConstraints;
-            // }
             function hasUserMedia() {
                 // check if the browser supports the WebRTC
                 return !!(_navigator.getUserMedia
@@ -663,7 +838,11 @@ var VideochatComponent = /** @class */ (function () {
                     .then(function (stream) {
                     var video = document.querySelector('#vid1');
                     // inserting our stream to the video tag
-                    video.src = window.URL.createObjectURL(stream);
+                    // video.src = window.URL.createObjectURL(stream);
+                    video.srcObject = stream;
+                    // video.onloadedmetadata = function(e) {
+                    //   video.play();
+                    // };
                     // (<HTMLVideoElement>document.getElementById('vid1')).src = window.URL.createObjectURL(stream);
                     // asign stream to local_media
                     local_media_stream = stream;
@@ -707,7 +886,7 @@ var VideochatComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./videochat.component.html */ "./src/app/videochat/videochat.component.html"),
             styles: [__webpack_require__(/*! ./videochat.component.css */ "./src/app/videochat/videochat.component.css")]
         }),
-        __metadata("design:paramtypes", [_app_service__WEBPACK_IMPORTED_MODULE_1__["ChatService"]])
+        __metadata("design:paramtypes", [_app_service__WEBPACK_IMPORTED_MODULE_1__["ChatService"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"]])
     ], VideochatComponent);
     return VideochatComponent;
 }());

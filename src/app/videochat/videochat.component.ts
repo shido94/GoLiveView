@@ -90,9 +90,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
           // // inserting our stream to the video tag
           // video.src = window.URL.createObjectURL(event.stream);
           video.srcObject = event.stream;
-          video.onloadedmetadata = function(e) {
-            video.play();
-          };
+
         };
 
         /* Add our local stream */
@@ -225,9 +223,9 @@ export class VideochatComponent implements OnInit, OnDestroy {
             // inserting our stream to the video tag
             // video.src = window.URL.createObjectURL(stream);
             video.srcObject = stream;
-            video.onloadedmetadata = function(e) {
-              video.play();
-            };
+            // video.onloadedmetadata = function(e) {
+            //   video.play();
+            // };
             // (<HTMLVideoElement>document.getElementById('vid1')).src = window.URL.createObjectURL(stream);
 
             // asign stream to local_media
