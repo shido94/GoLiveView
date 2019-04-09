@@ -634,7 +634,7 @@ module.exports = "video {\n  background: black;\n  /*border: 1px solid gray;*/\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id = \"callPage\" class = \"call-page\">\n  <video id = \"vid1\" autoplay muted=\"muted\"></video>\n  <video id = \"vid2\" autoplay muted=\"muted\"></video>\n</div>\n\n\n\n<!--<button (click)=\"btnGetAudioTracks()\">getAudioTracks()</button>-->\n<!--<button (click)=\"btnGetTrackById()\">getTrackById()</button>-->\n<!--<button (click)=\"btnGetTracks()\">getTracks()</button>-->\n<!--<button (click)=\"btnGetVideoTracks()\">getVideoTracks()</button>-->\n<!--<button (click)=\"btnRemoveAudioTrack()\">removeTrack() - audio</button>-->\n<!--<button (click)=\"btnRemoveVideoTrack()\">removeTrack() - video</button>-->\n"
+module.exports = "<div id = \"callPage\" class = \"call-page\">\n  <video id = \"vid1\" autoplay muted=\"muted\"></video>\n  <video id = \"vid2\" autoplay></video>\n</div>\n\n\n\n<!--<button (click)=\"btnGetAudioTracks()\">getAudioTracks()</button>-->\n<!--<button (click)=\"btnGetTrackById()\">getTrackById()</button>-->\n<!--<button (click)=\"btnGetTracks()\">getTracks()</button>-->\n<!--<button (click)=\"btnGetVideoTracks()\">getVideoTracks()</button>-->\n<!--<button (click)=\"btnRemoveAudioTrack()\">removeTrack() - audio</button>-->\n<!--<button (click)=\"btnRemoveVideoTrack()\">removeTrack() - video</button>-->\n"
 
 /***/ }),
 
