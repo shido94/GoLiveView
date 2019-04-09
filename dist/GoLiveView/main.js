@@ -689,10 +689,10 @@ var VideochatComponent = /** @class */ (function () {
         this._route = _route;
         // console.log('Signaling server said to add peer:', config);
         this._chatService.recievingAddPeer()
-            .subscribe(function (config) {
+            .subscribe(function (config1) {
             // console.log('reaching');
             // console.log('Signaling server said to add peer:', config);
-            var peerId = config.peerId;
+            var peerId = config1.peerId;
             if (peerId in peers) {
                 /* This could happen if the user joins multiple channels where the other peer is also in. */
                 // console.log("Already connected to peer ", peer_id);
@@ -733,7 +733,7 @@ var VideochatComponent = /** @class */ (function () {
              * The other user will get a 'sessionDescription' event and will
              * create an offer, then send back an answer 'sessionDescription' to us
              */
-            if (config.should_create_offer) {
+            if (config1.should_create_offer) {
                 // console.log('reaches');
                 peer_connection.createOffer(function (local_description) {
                     // console.log("Local offer description is: ", local_description);
@@ -751,10 +751,10 @@ var VideochatComponent = /** @class */ (function () {
             }
         });
         this._chatService.recievingSessionDescription()
-            .subscribe(function (config) {
-            var peerId = config.peerId;
+            .subscribe(function (config2) {
+            var peerId = config2.peerId;
             var peer = peers[peerId];
-            var remoteDescription = config.sessionDescription;
+            var remoteDescription = config2.sessionDescription;
             // console.log('config => ', config);
             var desc = new RTCSessionDescription(remoteDescription);
             var stuff = peer.setRemoteDescription(desc, function () {
@@ -784,14 +784,14 @@ var VideochatComponent = /** @class */ (function () {
             });
         });
         this._chatService.recievingIceCandidate()
-            .subscribe(function (config) {
-            var peer = peers[config.peerId];
-            var iceCandidate = config.iceCandidate;
+            .subscribe(function (config3) {
+            var peer = peers[config3.peerId];
+            var iceCandidate = config3.iceCandidate;
             peer.addIceCandidate(new RTCIceCandidate(iceCandidate));
         });
         this._chatService.removePeer()
-            .subscribe(function (config) {
-            var peerId = config.peerId;
+            .subscribe(function (config4) {
+            var peerId = config4.peerId;
             if (peerId in peer_media_elements) {
                 peer_media_elements[peerId].remove();
             }
@@ -799,12 +799,11 @@ var VideochatComponent = /** @class */ (function () {
                 peers[peerId].close();
             }
             delete peers[peerId];
-            delete peer_media_elements[config.peerId];
+            delete peer_media_elements[config4.peerId];
         });
     }
     VideochatComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log('reaches');
         var _navigator = navigator;
         var constraints = { audio: USE_AUDIO, video: USE_VIDEO };
         // Set_up Th e local media

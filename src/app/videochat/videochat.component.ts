@@ -1,8 +1,6 @@
-import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ChatService, PeerData} from '../app.service';
-import * as $ from 'jquery';
+import {Component, ElementRef, OnDestroy, OnInit} from '@angular/core';
+import {ChatService} from '../app.service';
 import 'webrtc-adapter';
-import {config} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 
 /** CONFIG **/
@@ -39,19 +37,16 @@ const ICE_SERVERS = [
   styleUrls: ['./videochat.component.css']
 })
 export class VideochatComponent implements OnInit, OnDestroy {
-  // video: HTMLVideoElement;
-  // stream;
-  channelName: string;
 
   constructor(private _chatService: ChatService, private _route: ActivatedRoute) {
 
     // console.log('Signaling server said to add peer:', config);
     this._chatService.recievingAddPeer()
-      .subscribe(config => {
+      .subscribe(config1 => {
         // console.log('reaching');
         // console.log('Signaling server said to add peer:', config);
 
-        const peerId = config.peerId;
+        const peerId = config1.peerId;
         if (peerId in peers) {
           /* This could happen if the user joins multiple channels where the other peer is also in. */
           // console.log("Already connected to peer ", peer_id);
@@ -101,7 +96,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
          * create an offer, then send back an answer 'sessionDescription' to us
          */
 
-        if (config.should_create_offer) {
+        if (config1.should_create_offer) {
           // console.log('reaches');
           peer_connection.createOffer( (local_description) => {
             // console.log("Local offer description is: ", local_description);
@@ -121,10 +116,10 @@ export class VideochatComponent implements OnInit, OnDestroy {
       });
 
     this._chatService.recievingSessionDescription()
-      .subscribe(config => {
-        const peerId = config.peerId;
+      .subscribe(config2 => {
+        const peerId = config2.peerId;
         const peer = peers[peerId];
-        const remoteDescription = config.sessionDescription;
+        const remoteDescription = config2.sessionDescription;
         // console.log('config => ', config);
         const desc = new RTCSessionDescription(remoteDescription);
         const stuff = peer.setRemoteDescription(desc, () => {
@@ -156,15 +151,15 @@ export class VideochatComponent implements OnInit, OnDestroy {
       });
 
     this._chatService.recievingIceCandidate()
-      .subscribe( config => {
-        const peer = peers[config.peerId];
-        const iceCandidate = config.iceCandidate;
+      .subscribe( config3 => {
+        const peer = peers[config3.peerId];
+        const iceCandidate = config3.iceCandidate;
         peer.addIceCandidate(new RTCIceCandidate(iceCandidate));
       });
 
     this._chatService.removePeer()
-      .subscribe(config => {
-        const peerId = config.peerId;
+      .subscribe(config4 => {
+        const peerId = config4.peerId;
         if (peerId in peer_media_elements) {
           peer_media_elements[peerId].remove();
         }
@@ -172,12 +167,11 @@ export class VideochatComponent implements OnInit, OnDestroy {
           peers[peerId].close();
         }
         delete peers[peerId];
-        delete peer_media_elements[config.peerId];
+        delete peer_media_elements[config4.peerId];
       });
   }
 
   ngOnInit() {
-    console.log('reaches');
     const _navigator = <any>navigator;
     const constraints = { audio: USE_AUDIO, video: USE_VIDEO };
 
@@ -223,10 +217,6 @@ export class VideochatComponent implements OnInit, OnDestroy {
             // inserting our stream to the video tag
             // video.src = window.URL.createObjectURL(stream);
             video.srcObject = stream;
-            // video.onloadedmetadata = function(e) {
-            //   video.play();
-            // };
-            // (<HTMLVideoElement>document.getElementById('vid1')).src = window.URL.createObjectURL(stream);
 
             // asign stream to local_media
             local_media_stream = stream;
