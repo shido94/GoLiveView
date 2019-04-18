@@ -634,7 +634,7 @@ module.exports = "video {\n  background: black;\n  /*border: 1px solid gray;*/\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id = \"callPage\" class = \"call-page\">\n  <video id = \"vid1\" autoplay muted=\"muted\"></video>\n  <video id = \"vid2\" autoplay></video>\n</div>\n\n\n\n<!--<button (click)=\"btnGetAudioTracks()\">getAudioTracks()</button>-->\n<!--<button (click)=\"btnGetTrackById()\">getTrackById()</button>-->\n<!--<button (click)=\"btnGetTracks()\">getTracks()</button>-->\n<!--<button (click)=\"btnGetVideoTracks()\">getVideoTracks()</button>-->\n<!--<button (click)=\"btnRemoveAudioTrack()\">removeTrack() - audio</button>-->\n<!--<button (click)=\"btnRemoveVideoTrack()\">removeTrack() - video</button>-->\n"
+module.exports = "<div id = \"callPage\" class = \"call-page\">\n  <video id = \"vid1\" autoplay muted=\"true\"></video>\n  <video id = \"vid2\" autoplay></video>\n</div>\n\n\n\n<!--<button (click)=\"btnGetAudioTracks()\">getAudioTracks()</button>-->\n<!--<button (click)=\"btnGetTrackById()\">getTrackById()</button>-->\n<!--<button (click)=\"btnGetTracks()\">getTracks()</button>-->\n<!--<button (click)=\"btnGetVideoTracks()\">getVideoTracks()</button>-->\n<!--<button (click)=\"btnRemoveAudioTrack()\">removeTrack() - audio</button>-->\n<!--<button (click)=\"btnRemoveVideoTrack()\">removeTrack() - video</button>-->\n"
 
 /***/ }),
 
@@ -839,10 +839,6 @@ var VideochatComponent = /** @class */ (function () {
                     // inserting our stream to the video tag
                     // video.src = window.URL.createObjectURL(stream);
                     video.srcObject = stream;
-                    // video.onloadedmetadata = function(e) {
-                    //   video.play();
-                    // };
-                    // (<HTMLVideoElement>document.getElementById('vid1')).src = window.URL.createObjectURL(stream);
                     // asign stream to local_media
                     local_media_stream = stream;
                     if (callback) {
