@@ -217,6 +217,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
             // inserting our stream to the video tag
             // video.src = window.URL.createObjectURL(stream);
             video.srcObject = stream;
+            video.muted = true;
 
             // asign stream to local_media
             local_media_stream = stream;
