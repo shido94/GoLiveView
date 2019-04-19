@@ -35,10 +35,6 @@ export class ChatService {
   // public messageSource = new Subject();
   private socket = io(BASE_URL);
 
-  // sendMessage(message: string) {
-  //   console.log(message);
-  //   this.messageSource.next(message);
-  // }
 
   sendData(joinData) {
     this.socket.emit('join', joinData);
@@ -48,6 +44,18 @@ export class ChatService {
     console.log('reaxdf');
     this.socket.on('disconnect');
     this.socket.emit('pageDisconnected');
+  }
+
+
+
+  getList() {
+    const observables = new Observable(observer => {
+      this.socket.on('lists', (data) => {
+        observer.next(data);
+      });
+      return () => {this.socket.disconnect(); };
+    });
+    return observables;
   }
 
   removePeer() {

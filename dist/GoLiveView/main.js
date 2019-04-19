@@ -146,7 +146,8 @@ var AppModule = /** @class */ (function () {
                 _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatFormFieldModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatCardModule"],
                 _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatButtonModule"],
-                _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatInputModule"]
+                _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatInputModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_10__["MatListModule"]
             ],
             providers: [_app_service__WEBPACK_IMPORTED_MODULE_9__["ChatService"]],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_2__["AppComponent"]]
@@ -239,10 +240,6 @@ var ChatService = /** @class */ (function () {
         // public messageSource = new Subject();
         this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_2__(BASE_URL);
     }
-    // sendMessage(message: string) {
-    //   console.log(message);
-    //   this.messageSource.next(message);
-    // }
     ChatService.prototype.sendData = function (joinData) {
         this.socket.emit('join', joinData);
     };
@@ -250,6 +247,16 @@ var ChatService = /** @class */ (function () {
         console.log('reaxdf');
         this.socket.on('disconnect');
         this.socket.emit('pageDisconnected');
+    };
+    ChatService.prototype.getList = function () {
+        var _this = this;
+        var observables = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Observable"](function (observer) {
+            _this.socket.on('lists', function (data) {
+                observer.next(data);
+            });
+            return function () { _this.socket.disconnect(); };
+        });
+        return observables;
     };
     ChatService.prototype.removePeer = function () {
         var _this = this;
@@ -327,7 +334,7 @@ module.exports = ".mat-form {\n  min-width: 150px;\n  max-width: 500px;\n  width
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<mat-card>\n  <div class=\"header\">\n    <h1>GoLive</h1>\n  </div>\n  <div class=\"pHeader\">\n    <p>Please use some expressive channel name</p>\n  </div>\n  <mat-card-content>\n    <div class=\"form\">\n      <form class=\"mat-form\" method=\"post\" [formGroup]=\"uploadForm\" enctype=\"multipart/form-data\" (ngSubmit)=\"OnUpload(uploadForm.value)\">\n        <mat-form-field class=\"form-full-width\">\n          <input matInput placeholder=\"Channel Name\" #sub formControlName=\"chatName\"\n                 [errorStateMatcher]=\"matcher\">\n          <mat-error *ngIf=\"!this.uploadForm.hasError('required')\">\n            Channel Name is required\n          </mat-error>\n          <mat-error *ngIf=\"this.uploadForm.hasError('required')\">\n            Channel Name is <strong>required</strong>\n          </mat-error>\n        </mat-form-field>\n        <button mat-raised-button color=\"primary\" (invalid)=\"!uploadForm\" (click)=\"OnUpload(uploadForm.value)\">GoLive</button>\n      </form>\n    </div>\n  </mat-card-content>\n</mat-card>\n"
+module.exports = "<mat-card>\n  <div class=\"header\">\n    <h1>GoLive</h1>\n  </div>\n  <div class=\"pHeader\">\n    <p>Please use some expressive channel name</p>\n  </div>\n  <mat-card-content>\n    <div class=\"form\">\n      <form class=\"mat-form\" method=\"post\" [formGroup]=\"uploadForm\" enctype=\"multipart/form-data\" (ngSubmit)=\"OnUpload(uploadForm.value)\">\n        <mat-form-field class=\"form-full-width\">\n          <input matInput placeholder=\"User Name\" formControlName=\"userName\"\n                 [errorStateMatcher]=\"matcher\">\n          <mat-error *ngIf=\"!this.uploadForm.hasError('required')\">\n            User Name is required\n          </mat-error>\n          <mat-error *ngIf=\"this.uploadForm.hasError('required')\">\n            User Name is <strong>required</strong>\n          </mat-error>\n        </mat-form-field>\n        <mat-form-field class=\"form-full-width\">\n          <input matInput placeholder=\"Channel name\" formControlName=\"chatName\"\n                 [errorStateMatcher]=\"matcher\">\n          <mat-error *ngIf=\"!this.uploadForm.hasError('required')\">\n            Channel Name is required\n          </mat-error>\n          <mat-error *ngIf=\"this.uploadForm.hasError('required')\">\n            Channel Name is <strong>required</strong>\n          </mat-error>\n        </mat-form-field>\n        <p *ngIf=\"error\" style=\"color: red\">This channel name is already live</p>\n        <button mat-raised-button color=\"primary\" (invalid)=\"!uploadForm\" (click)=\"OnUpload(uploadForm.value)\">GoLive</button>\n      </form>\n    </div>\n  </mat-card-content>\n</mat-card>\n"
 
 /***/ }),
 
@@ -372,18 +379,34 @@ var MyErrorStateMatcher = /** @class */ (function () {
 
 var ChannelComponent = /** @class */ (function () {
     function ChannelComponent(_router, _formBuilder, _chatService) {
+        var _this = this;
         this._router = _router;
         this._formBuilder = _formBuilder;
         this._chatService = _chatService;
+        this.list = {};
+        this.error = false;
+        this._chatService.getList()
+            .subscribe(function (channels) {
+            _this.list = channels;
+        });
     }
     ChannelComponent.prototype.ngOnInit = function () {
         this.uploadForm = this._formBuilder.group({
-            chatName: [null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
+            chatName: [null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
+            userName: [null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
         });
         this.matcher = new MyErrorStateMatcher();
     };
-    ChannelComponent.prototype.OnUpload = function (name) {
-        this._router.navigate(['channel', name.chatName]);
+    ChannelComponent.prototype.OnUpload = function (form) {
+        // form.chatName in this.list
+        if (localStorage.getItem('channelName') === form.chatName) {
+            this.error = true;
+        }
+        else {
+            this.error = false;
+            localStorage.setItem('channelName', form.chatName);
+            this._router.navigate(['channel', form.chatName]);
+        }
     };
     ChannelComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -418,7 +441,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  list works!\n</p>\n"
+module.exports = "<mat-nav-list>\n  <button mat-list-item (click)=\"goLive(link)\" *ngFor=\"let link of list\">\n    {{ link }}\n  </button>\n</mat-nav-list>\n"
 
 /***/ }),
 
@@ -433,6 +456,8 @@ module.exports = "<p>\n  list works!\n</p>\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ListComponent", function() { return ListComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _app_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../app.service */ "./src/app/app.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -443,10 +468,40 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
 var ListComponent = /** @class */ (function () {
-    function ListComponent() {
+    function ListComponent(_chatService, _router) {
+        var _this = this;
+        this._chatService = _chatService;
+        this._router = _router;
+        this.list = [];
+        this._chatService.getList()
+            .subscribe(function (channels) {
+            console.log(channels);
+            var _loop_1 = function (channel) {
+                if (channels.hasOwnProperty(channel)) {
+                    console.log(channel);
+                    console.count(channel);
+                    _this.list.push(channels[channel]);
+                    var result = _this.list.filter(function (i) { return i === channels[channel]; }).length;
+                    if (result === 2) {
+                        var filtered = _this.list.filter(function (element) {
+                            return element !== channels[channel];
+                        });
+                        _this.list = filtered;
+                    }
+                }
+            };
+            for (var channel in channels) {
+                _loop_1(channel);
+            }
+        });
     }
     ListComponent.prototype.ngOnInit = function () {
+    };
+    ListComponent.prototype.goLive = function (link) {
+        this._router.navigate(['channel', link]);
     };
     ListComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -454,7 +509,7 @@ var ListComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./list.component.html */ "./src/app/list/list.component.html"),
             styles: [__webpack_require__(/*! ./list.component.css */ "./src/app/list/list.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_app_service__WEBPACK_IMPORTED_MODULE_1__["ChatService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
     ], ListComponent);
     return ListComponent;
 }());
@@ -588,16 +643,6 @@ var ShowvideosComponent = /** @class */ (function () {
         this.video.src = URL.createObjectURL(myMediaSource);
         var videoSourceBuffer = myMediaSource
             .addSourceBuffer('video/mp4; codecs="avc1.64001e"');
-        //
-        // this._chatService.recieveData()
-        //   .subscribe((data) => {
-        //     console.log(data);
-        //
-        //
-        //     // const videoData = data.arrayBuffer();
-        //     // videoSourceBuffer.appendBuffer(videoData);
-        //     // videoSourceBuffer.appendBuffer(data);
-        //   });
     }
     ShowvideosComponent.prototype.ngOnInit = function () {
     };
@@ -634,7 +679,7 @@ module.exports = "video {\n  background: black;\n  /*border: 1px solid gray;*/\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id = \"callPage\" class = \"call-page\">\n  <video id = \"vid1\" autoplay></video>\n  <video id = \"vid2\" autoplay></video>\n</div>\n\n\n\n<!--<button (click)=\"btnGetAudioTracks()\">getAudioTracks()</button>-->\n<!--<button (click)=\"btnGetTrackById()\">getTrackById()</button>-->\n<!--<button (click)=\"btnGetTracks()\">getTracks()</button>-->\n<!--<button (click)=\"btnGetVideoTracks()\">getVideoTracks()</button>-->\n<!--<button (click)=\"btnRemoveAudioTrack()\">removeTrack() - audio</button>-->\n<!--<button (click)=\"btnRemoveVideoTrack()\">removeTrack() - video</button>-->\n"
+module.exports = "<div id = \"callPage\" class = \"call-page\">\n  <video id = \"vid1\"></video>\n  <video id = \"vid2\" autoplay></video>\n</div>\n\n\n\n<!--<button (click)=\"btnGetAudioTracks()\">getAudioTracks()</button>-->\n<!--<button (click)=\"btnGetTrackById()\">getTrackById()</button>-->\n<!--<button (click)=\"btnGetTracks()\">getTracks()</button>-->\n<!--<button (click)=\"btnGetVideoTracks()\">getVideoTracks()</button>-->\n<!--<button (click)=\"btnRemoveAudioTrack()\">removeTrack() - audio</button>-->\n<!--<button (click)=\"btnRemoveVideoTrack()\">removeTrack() - video</button>-->\n"
 
 /***/ }),
 
@@ -709,12 +754,16 @@ var VideochatComponent = /** @class */ (function () {
                 if (event.candidate) {
                     // console.log(i);
                     // console.log('phuch gya');
-                    _this._chatService.relayIceCandidate({
-                        'peerId': peerId,
-                        'iceCandidate': {
-                            'sdpMLineIndex': event.candidate.sdpMLineIndex,
-                            'candidate': event.candidate.candidate
-                        }
+                    _this._route.params.subscribe(function (params) {
+                        DEFAULT_CHANNEL = params['channel'];
+                        _this._chatService.relayIceCandidate({
+                            'peerId': peerId,
+                            'peerChannel': DEFAULT_CHANNEL,
+                            'iceCandidate': {
+                                'sdpMLineIndex': event.candidate.sdpMLineIndex,
+                                'candidate': event.candidate.candidate
+                            }
+                        });
                     });
                 }
             };
@@ -799,6 +848,7 @@ var VideochatComponent = /** @class */ (function () {
                 peers[peerId].close();
             }
             delete peers[peerId];
+            localStorage.clear();
             delete peer_media_elements[config4.peerId];
         });
     }
@@ -812,7 +862,7 @@ var VideochatComponent = /** @class */ (function () {
              * microphone/camcorder, join the channel and start peering up */
             _this._route.params.subscribe(function (params) {
                 DEFAULT_CHANNEL = params['channel'];
-                _this._chatService.sendData({ 'channel': DEFAULT_CHANNEL, 'userdata': { 'whatever-you-want-here': 'stuff' } });
+                _this._chatService.sendData({ 'channel': DEFAULT_CHANNEL, 'userdata': 'any stuff' });
             });
         }, function (error) {
             alert('Camera can not be access');
@@ -840,6 +890,7 @@ var VideochatComponent = /** @class */ (function () {
                     // video.src = window.URL.createObjectURL(stream);
                     video.srcObject = stream;
                     video.muted = true;
+                    video.play();
                     // asign stream to local_media
                     local_media_stream = stream;
                     if (callback) {
@@ -870,6 +921,7 @@ var VideochatComponent = /** @class */ (function () {
                 peers[peer_id].close();
             }
         }
+        localStorage.clear();
         peers = {};
         peer_media_elements = {};
         this.ngOnInit();

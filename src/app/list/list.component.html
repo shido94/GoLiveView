@@ -1,3 +1,5 @@
-<p>
-  list works!
-</p>
+<mat-nav-list>
+  <button mat-list-item (click)="goLive(link)" *ngFor="let link of list">
+    {{ link }}
+  </button>
+</mat-nav-list>

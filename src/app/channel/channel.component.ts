@@ -20,18 +20,33 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class ChannelComponent implements OnInit {
   matcher: any;
   uploadForm: FormGroup;
+  list = {};
+  error = false;
 
-  constructor(private _router: Router, private _formBuilder: FormBuilder, private _chatService: ChatService) { }
+  constructor(private _router: Router, private _formBuilder: FormBuilder, private _chatService: ChatService) {
+    this._chatService.getList()
+      .subscribe(channels => {
+        this.list = channels;
+      });
+  }
 
   ngOnInit() {
     this.uploadForm = this._formBuilder.group({
-      chatName : [null, Validators.required]
+      chatName : [null, Validators.required],
+      userName : [null, Validators.required]
     });
     this.matcher = new MyErrorStateMatcher();
   }
 
-  OnUpload(name) {
-    this._router.navigate(['channel', name.chatName]);
+  OnUpload(form) {
+    // form.chatName in this.list
+    if (localStorage.getItem('channelName') === form.chatName) {
+      this.error = true;
+    } else {
+      this.error = false;
+      localStorage.setItem('channelName', form.chatName);
+      this._router.navigate(['channel', form.chatName]);
+    }
   }
 
 }

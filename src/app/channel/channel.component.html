@@ -9,7 +9,17 @@
     <div class="form">
       <form class="mat-form" method="post" [formGroup]="uploadForm" enctype="multipart/form-data" (ngSubmit)="OnUpload(uploadForm.value)">
         <mat-form-field class="form-full-width">
-          <input matInput placeholder="Channel Name" #sub formControlName="chatName"
+          <input matInput placeholder="User Name" formControlName="userName"
+                 [errorStateMatcher]="matcher">
+          <mat-error *ngIf="!this.uploadForm.hasError('required')">
+            User Name is required
+          </mat-error>
+          <mat-error *ngIf="this.uploadForm.hasError('required')">
+            User Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-full-width">
+          <input matInput placeholder="Channel name" formControlName="chatName"
                  [errorStateMatcher]="matcher">
           <mat-error *ngIf="!this.uploadForm.hasError('required')">
             Channel Name is required
@@ -18,6 +28,7 @@
             Channel Name is <strong>required</strong>
           </mat-error>
         </mat-form-field>
+        <p *ngIf="error" style="color: red">This channel name is already live</p>
         <button mat-raised-button color="primary" (invalid)="!uploadForm" (click)="OnUpload(uploadForm.value)">GoLive</button>
       </form>
     </div>

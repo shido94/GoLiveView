@@ -20,16 +20,6 @@ export class ShowvideosComponent implements OnInit {
     const videoSourceBuffer = myMediaSource
       .addSourceBuffer('video/mp4; codecs="avc1.64001e"');
 
-    //
-    // this._chatService.recieveData()
-    //   .subscribe((data) => {
-    //     console.log(data);
-    //
-    //
-    //     // const videoData = data.arrayBuffer();
-    //     // videoSourceBuffer.appendBuffer(videoData);
-    //     // videoSourceBuffer.appendBuffer(data);
-    //   });
 
   }
 

@@ -68,12 +68,18 @@ export class VideochatComponent implements OnInit, OnDestroy {
           if (event.candidate) {
             // console.log(i);
             // console.log('phuch gya');
-            this._chatService.relayIceCandidate({
-              'peerId': peerId,
-              'iceCandidate': {
-                'sdpMLineIndex': event.candidate.sdpMLineIndex,
-                'candidate': event.candidate.candidate
-              }
+
+            this._route.params.subscribe(params => {
+              DEFAULT_CHANNEL = params['channel'];
+
+              this._chatService.relayIceCandidate({
+                'peerId': peerId,
+                'peerChannel' : DEFAULT_CHANNEL,
+                'iceCandidate': {
+                  'sdpMLineIndex': event.candidate.sdpMLineIndex,
+                  'candidate': event.candidate.candidate
+                }
+              });
             });
           }
         };
@@ -167,6 +173,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
           peers[peerId].close();
         }
         delete peers[peerId];
+        localStorage.clear();
         delete peer_media_elements[config4.peerId];
       });
   }
@@ -181,8 +188,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
        * microphone/camcorder, join the channel and start peering up */
       this._route.params.subscribe(params => {
         DEFAULT_CHANNEL = params['channel'];
-
-        this._chatService.sendData({'channel': DEFAULT_CHANNEL, 'userdata': {'whatever-you-want-here': 'stuff'}});
+        this._chatService.sendData({'channel': DEFAULT_CHANNEL, 'userdata': 'any stuff'});
       });
     }, error => {
       alert('Camera can not be access');
@@ -218,6 +224,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
             // video.src = window.URL.createObjectURL(stream);
             video.srcObject = stream;
             video.muted = true;
+            video.play();
 
             // asign stream to local_media
             local_media_stream = stream;
@@ -251,7 +258,7 @@ export class VideochatComponent implements OnInit, OnDestroy {
         peers[peer_id].close();
       }
     }
-
+    localStorage.clear();
     peers = {};
     peer_media_elements = {};
     this.ngOnInit();

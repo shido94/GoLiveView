@@ -9,7 +9,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {routes} from './app.routes';
 import {ChatService} from './app.service';
-import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatFormFieldModule, MatInputModule, MatListModule} from '@angular/material';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ChannelComponent } from './channel/channel.component';
 import { ListComponent } from './list/list.component';
@@ -32,7 +32,8 @@ import { ListComponent } from './list/list.component';
     MatFormFieldModule,
     MatCardModule,
     MatButtonModule,
-    MatInputModule
+    MatInputModule,
+    MatListModule
   ],
   providers: [ChatService],
   bootstrap: [AppComponent]
